@@ -11,6 +11,6 @@ namespace ReportPing
 		[Description("Indicates whether the plugin is enabled or not")]
 		public bool IsEnabled { get; set; } = true;
 
-		[Description("RoleID to ping")] public string RoleID { get; set; } = "RoleID";
+		[Description("RoleID to ping")] public string RoleId { get; set; } = "RoleID";
 	}
 }

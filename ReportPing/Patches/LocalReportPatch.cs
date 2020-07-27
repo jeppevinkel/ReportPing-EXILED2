@@ -30,7 +30,7 @@ namespace ReportPing.Patches
 			try
 			{
 				string payload = JsonSerializer.ToJsonString<DiscordWebhook>(new DiscordWebhook(
-					$"<@&{ReportPing.Instance.Config.RoleID}>", CheaterReport.WebhookUsername,
+					$"<@&{ReportPing.Instance.Config.RoleId}>", CheaterReport.WebhookUsername,
 					CheaterReport.WebhookAvatar, false, new DiscordEmbed[1]
 					{
 						new DiscordEmbed(CheaterReport.ReportHeader, "rich", CheaterReport.ReportContent,
@@ -68,14 +68,14 @@ namespace ReportPing.Patches
 				__state = false;
 			}
 
-			Log.Debug($"LocalReport prefix with the state {__state} sent to <@&{ReportPing.Instance.Config.RoleID}>.", Loader.ShouldDebugBeShown);
+			Log.Debug($"LocalReport prefix with the state {__state} sent to <@&{ReportPing.Instance.Config.RoleId}>.", Loader.ShouldDebugBeShown);
 			return false;
 		}
 
 		static void Postfix(ref bool __result, bool __state)
 		{
 			__result = __state;
-			Log.Debug($"LocalReport postfix with return value {__result} sent to <@&{ReportPing.Instance.Config.RoleID}>.", Loader.ShouldDebugBeShown);
+			Log.Debug($"LocalReport postfix with return value {__result} sent to <@&{ReportPing.Instance.Config.RoleId}>.", Loader.ShouldDebugBeShown);
 		}
 	}
 }
