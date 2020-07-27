@@ -39,8 +39,7 @@ namespace ReportPing
 
 			Patch();
 
-			Log.Debug($"I will ping <@&{Config.RoleId}> whenever a report is posted over discord webhook.");
-			Log.Debug($"I will ping <@&{ReportPing.Instance.Config.RoleId}> whenever a report is posted over discord webhook.");
+			Log.Debug($"I will ping the following roles whenever a report is posted over discord webhook. {ReportPing.Instance.Config.RoleId.Join()}");
 		}
 
 		public override void OnDisabled()
