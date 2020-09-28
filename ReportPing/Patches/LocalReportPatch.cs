@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
-using Exiled.API.Features;
-using Exiled.Loader;
 using HarmonyLib;
 using UnityEngine;
 using Utf8Json;
@@ -34,6 +28,8 @@ namespace ReportPing.Patches
 					pings += $"<@&{s}> ";
 				}
 
+				pings = Uri.EscapeDataString(pings);
+
 				string payload = JsonSerializer.ToJsonString<DiscordWebhook>(new DiscordWebhook(
 					pings, CheaterReport.WebhookUsername,
 					CheaterReport.WebhookAvatar, false, new DiscordEmbed[1]
@@ -42,28 +38,18 @@ namespace ReportPing.Patches
 							CheaterReport.WebhookColor, new DiscordEmbedField[10]
 							{
 								new DiscordEmbedField("Server Name", CheaterReport.ServerName, false),
-								new DiscordEmbedField("Server Endpoint",
-									string.Format("{0}:{1}", (object) ServerConsole.Ip, (object) ServerConsole.Port),
-									false),
-								new DiscordEmbedField("Reporter UserID", CheaterReport.AsDiscordCode(reporterUserId),
-									false),
-								new DiscordEmbedField("Reporter Nickname",
-									CheaterReport.DiscordSanitize(reporterNickname), false),
-								new DiscordEmbedField("Reported UserID", CheaterReport.AsDiscordCode(reportedUserId),
-									false),
-								new DiscordEmbedField("Reported Nickname",
-									CheaterReport.DiscordSanitize(reportedNickname), false),
+								new DiscordEmbedField("Server Endpoint", string.Format("{0}:{1}", (object) ServerConsole.Ip, (object) ServerConsole.Port), false),
+								new DiscordEmbedField("Reporter UserID", CheaterReport.AsDiscordCode(reporterUserId), false),
+								new DiscordEmbedField("Reporter Nickname", CheaterReport.DiscordSanitize(reporterNickname), false),
+								new DiscordEmbedField("Reported UserID", CheaterReport.AsDiscordCode(reportedUserId), false),
+								new DiscordEmbedField("Reported Nickname", CheaterReport.DiscordSanitize(reportedNickname), false),
 								new DiscordEmbedField("Reported ID", reportedId.ToString(), false),
 								new DiscordEmbedField("Reason", CheaterReport.DiscordSanitize(reason), false),
-								new DiscordEmbedField("Timestamp",
-									TimeBehaviour.FormatTime("yyyy-MM-dd HH:mm:ss.fff zzz"), false),
-								new DiscordEmbedField("UTC Timestamp",
-									TimeBehaviour.FormatTime("yyyy-MM-dd HH:mm:ss.fffZ", DateTimeOffset.UtcNow), false)
+								new DiscordEmbedField("Timestamp", TimeBehaviour.Rfc3339Time(), false),
+								new DiscordEmbedField("UTC Timestamp", TimeBehaviour.Rfc3339Time(DateTimeOffset.UtcNow), false)
 							})
 					}));
-				HttpClient client = new HttpClient();
-				var content = new StringContent(payload, Encoding.UTF8, "application/json");
-				var result = client.PostAsync(friendlyFire ? FriendlyFireConfig.WebhookUrl : CheaterReport.WebhookUrl, content).Result;
+				HttpQuery.Post(friendlyFire ? FriendlyFireConfig.WebhookUrl : CheaterReport.WebhookUrl, "payload_json=" + payload);
 				__state = true;
 			}
 			catch (Exception ex)

@@ -1,7 +1,6 @@
 ﻿using System;
 using Exiled.API.Enums;
 using Exiled.API.Features;
-using Exiled.Events;
 using Exiled.Loader;
 using HarmonyLib;
 
@@ -9,17 +8,9 @@ namespace ReportPing
 {
 	public class ReportPing : Plugin<Config>
 	{
-		private static readonly Lazy<ReportPing> LazyInstance = new Lazy<ReportPing>(() => new ReportPing());
+		public static ReportPing Instance { get; } = new ReportPing();
 
-		private ReportPing()
-		{
-
-		}
-
-		/// <summary>
-		/// Gets the lazy instance.
-		/// </summary>
-		public static ReportPing Instance => LazyInstance.Value;
+		private ReportPing() { }
 
 		public override PluginPriority Priority { get; } = PluginPriority.Low;
 
